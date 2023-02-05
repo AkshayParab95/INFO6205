@@ -4,10 +4,13 @@
 
 package edu.neu.coe.info6205.util;
 
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+
+import edu.neu.coe.info6205.sort.elementary.InsertionSort;
 
 import static edu.neu.coe.info6205.util.Utilities.formatWhole;
 
@@ -125,4 +128,79 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
     private final Consumer<T> fPost;
 
     final static LazyLogger logger = new LazyLogger(Benchmark_Timer.class);
+      
+    public static void main(String[] args) {
+        int inputSize = 1000;
+        int repetitions = 100;
+        Random generateRandom = new Random();
+        int doublingLimit = 5;
+        
+        while(doublingLimit > 0) {
+        	int n = inputSize;
+            
+            Supplier<Integer[]> randomArrayGenerator = new Supplier<Integer[]>() {
+				@Override
+				public Integer[] get() {
+					Integer[] input = new Integer[n];
+	                for(int i = 0; i < n; i++) input[i] = generateRandom.nextInt();
+	                return input;
+				}
+            };
+            
+            Supplier<Integer[]> partiallyOrderedArrayGenerator = new Supplier<Integer[]>() {
+				@Override
+				public Integer[] get() {
+					Integer[] input = new Integer[n];
+	                for(int i = 0; i < n/2; i++) input[i] = i;
+	                for(int i = n/2; i < n; i++)input[i] = generateRandom.nextInt();
+	                return input;
+				}
+            };
+            
+            Supplier<Integer[]> orderedArrayGenerator = new Supplier<Integer[]>() {
+				@Override
+				public Integer[] get() {
+					 Integer[] input = new Integer[n];
+		                for(int i = 0; i < n; i++) input[i] = i;
+		                return input;
+				}
+            };
+
+            Supplier<Integer[]> reverseArrayGenerator = new Supplier<Integer[]>() {
+				@Override
+				public Integer[] get() {
+					 Integer randomNum = generateRandom.nextInt();
+					 Integer[] input = new Integer[n];
+		                for(int i = n; i > 0; i--) input[n-i] = i+randomNum;
+		                return input;
+				}
+            };
+            
+            InsertionSort<Integer> sortingAlgo = new InsertionSort<>();
+            
+            Consumer<Integer[]> consumer = new Consumer<Integer[]>() {
+				@Override
+				public void accept(Integer[] inputArray) {
+					sortingAlgo.sort(inputArray, 0, inputArray.length);
+				};
+            };
+            
+            Benchmark_Timer<Integer[]> benchMark = new Benchmark_Timer<>("Insertion Sort Benchmarking With Doubling Method, Current Input Size(n) = "+inputSize+" & Iterations(m) = "+repetitions, consumer);
+            
+            final double randomTime = benchMark.runFromSupplier(randomArrayGenerator, repetitions);
+            System.out.println("Average time taken by Insertion Sort for Randomly Sorted Input is "+randomTime+" ms");
+            
+            final double partialTime = benchMark.runFromSupplier(partiallyOrderedArrayGenerator, repetitions);
+            System.out.println("Average time taken by Insertion Sort for Partially Sorted Input is "+partialTime+" ms");
+
+            final double orderedTime = benchMark.runFromSupplier(orderedArrayGenerator, repetitions);
+            System.out.println("Average time taken by Insertion Sort for Ordered Input is "+orderedTime+" ms");
+
+            final double reverseTime = benchMark.runFromSupplier(reverseArrayGenerator, repetitions);
+            System.out.println("Average time taken by Insertion Sort for Reverse Sorted Input is = "+reverseTime+ " ms");
+
+            inputSize *= 2;
+            doublingLimit--;
+        }
+    }
 }
