@@ -8,6 +8,7 @@
 package edu.neu.coe.info6205.union_find;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Height-weighted Quick Union with Path Compression
@@ -82,6 +83,10 @@ public class UF_HWQUPC implements UF {
         validate(p);
         int root = p;
         // FIXME
+        while(root != parent[root]){
+            if(this.pathCompression) doPathCompression(p);
+            root = parent[root];
+        }
         // END 
         return root;
     }
@@ -170,6 +175,15 @@ public class UF_HWQUPC implements UF {
 
     private void mergeComponents(int i, int j) {
         // FIXME make shorter root point to taller one
+    	if (i == j) return;
+
+        if (height[i] <  height[j]) {
+            updateParent(i, j);
+            updateHeight(j, i);
+        }else {
+            updateParent(j, i);
+            updateHeight(i, j);
+        }
         // END 
     }
 
@@ -178,6 +192,30 @@ public class UF_HWQUPC implements UF {
      */
     private void doPathCompression(int i) {
         // FIXME update parent to value of grandparent
+    	if(i == parent[i]) return;
+    	updateParent(i, parent[parent[i]]);
         // END 
+    }
+    
+    public static void main(String[] args){
+    	Random randomNumGenerator = new Random();
+        int numberOfSites[] = {1250, 2500, 5000, 10000, 20000, 40000, 80000, 160000, 320000, 640000, 1280000, 2560000, 5120000, 10240000};
+        int connectionCount;
+        double ratio = 0.0;
+        for (int i=0; i<numberOfSites.length; i++){
+        	
+            connectionCount = 0;
+            int n = numberOfSites[i];
+            double adjustedLinearithmic = 0.5309*n*Math.log(n);
+            UF_HWQUPC unionFind = new UF_HWQUPC(n);
+            while(unionFind.components() > 1){
+            	connectionCount++;
+                int site1 = randomNumGenerator.nextInt(n);
+                int site2 = randomNumGenerator.nextInt(n);
+                unionFind.connect(site1, site2);
+            }
+            ratio += connectionCount/adjustedLinearithmic;
+            System.out.println("Numbe Of Sites = "+n+" Number of Connections = "+connectionCount+" Linearithmic Complexity = "+adjustedLinearithmic);
+        }
     }
 }
