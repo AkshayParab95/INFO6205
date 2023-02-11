@@ -215,7 +215,24 @@ public class UF_HWQUPC implements UF {
                 unionFind.connect(site1, site2);
             }
             ratio += connectionCount/adjustedLinearithmic;
-            System.out.println("Numbe Of Sites = "+n+" Number of Connections = "+connectionCount+" Linearithmic Complexity = "+adjustedLinearithmic);
+            System.out.println("Number Of Sites = "+n+" Number of Connections = "+connectionCount+" Linearithmic Complexity = "+adjustedLinearithmic);
         }
     }
 }
+
+/* Output:
+Number Of Sites = 1250 Number of Connections = 4030 Linearithmic Complexity = 4732.242736255413
+Number Of Sites = 2500 Number of Connections = 9452 Linearithmic Complexity = 10384.465067909014
+Number Of Sites = 5000 Number of Connections = 25734 Linearithmic Complexity = 22608.889326614404
+Number Of Sites = 10000 Number of Connections = 45745 Linearithmic Complexity = 48897.69703482156
+Number Of Sites = 20000 Number of Connections = 109180 Linearithmic Complexity = 105155.2308328286
+Number Of Sites = 40000 Number of Connections = 226786 Linearithmic Complexity = 225030.1351920282
+Number Of Sites = 80000 Number of Connections = 466505 Linearithmic Complexity = 479499.6174367984
+Number Of Sites = 160000 Number of Connections = 1010141 Linearithmic Complexity = 1017877.9289790808
+Number Of Sites = 320000 Number of Connections = 2088176 Linearithmic Complexity = 2153513.2461691294
+Number Of Sites = 640000 Number of Connections = 4218314 Linearithmic Complexity = 4542541.268760195
+Number Of Sites = 1280000 Number of Connections = 8451916 Linearithmic Complexity = 9556112.090364262
+Number Of Sites = 2560000 Number of Connections = 20652367 Linearithmic Complexity = 2.005428328641627E7
+Number Of Sites = 5120000 Number of Connections = 39716247 Linearithmic Complexity = 4.199268478420802E7
+Number Of Sites = 10240000 Number of Connections = 87556349 Linearithmic Complexity = 8.775360599116704E7
+*/
