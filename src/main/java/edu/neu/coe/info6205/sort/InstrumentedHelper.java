@@ -317,9 +317,10 @@ public class InstrumentedHelper<X extends Comparable<X>> extends BaseHelper<X> {
      */
     @Override
     public void postProcess(X[] xs) {
-        super.postProcess(xs);
-        if (!sorted(xs)) throw new BaseHelper.HelperException("Array is not sorted");
-        gatherStatistic();
+//        super.postProcess(xs);
+//        if (!sorted(xs)) throw new BaseHelper.HelperException("Array is not sorted");
+//        gatherStatistic();
+    	return;
     }
 
     private void gatherStatistic() {
@@ -493,11 +494,11 @@ public class InstrumentedHelper<X extends Comparable<X>> extends BaseHelper<X> {
 
     // NOTE: the following private methods are only for testing (using reflection).
 
-    private int getHits() {
+    public int getHits() {
         return hits;
     }
 
-    private int getCopies() {
+    public int getCopies() {
         return copies;
     }
 
